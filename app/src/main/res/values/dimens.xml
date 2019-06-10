@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="margin_big_logo">64dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="size_logo_small">82dp</dimen>
 </resources>
