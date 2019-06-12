@@ -6,6 +6,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationManager
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.location.LocationRequest
@@ -14,12 +15,17 @@ import com.kacper.compassapp.utils.Utils
 import com.patloew.rxlocation.RxLocation
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
+import timber.log.Timber
 
 class CompassViewModel(
     private val rxLocation: RxLocation
 ) : ViewModel() {
+
+    val state = PublishSubject.create<CompassState>()
+
     var gravityArray = FloatArray(3)
     var geomagneticArray = FloatArray(3)
 
@@ -33,7 +39,7 @@ class CompassViewModel(
     var destinationLon = ObservableField<String>()
     var currentDestination = ObservableField<Location?>()
 
-    val state = PublishSubject.create<CompassState>()
+    var isNavigationStarted = ObservableBoolean(false)
 
     fun onSensorValueChange(sensorEvent: SensorEvent) {
         if (sensorEvent.sensor.type == Sensor.TYPE_ACCELEROMETER) {
@@ -72,15 +78,22 @@ class CompassViewModel(
 
     @SuppressLint("MissingPermission")
     fun requestLocation() {
+        isNavigationStarted.set(true)
+
         val locationRequest = LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
             .setInterval(5000)
 
-        compositeDisposable.add(
+        compositeDisposable +=
             rxLocation.location().updates(locationRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { })
+                .subscribe ({
+                    destinationBearing =
+                            it.bearingTo(currentDestination.get())
+                }, {
+                    Timber.e(it)
+                })
 
     }
 

@@ -59,7 +59,4 @@ dependencies {
 
     //timber
     implementation "com.jakewharton.timber:timber:$versions.timber"
-
-    //permissions
-    implementation "com.karumi:dexter:$versions.dexter"
 }

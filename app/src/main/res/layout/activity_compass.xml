@@ -33,7 +33,7 @@
             android:layout_height="0dp"
             app:srcCompat="@drawable/ic_compass_destination"
             android:tint="@color/colorPrimaryDark"
-            app:visibility="@{compassViewModel.currentDestination != null}"
+            app:visibility="@{compassViewModel.isNavigationStarted}"
             android:layout_margin="@dimen/compass_destination_arrow_margin"
             app:layout_constraintTop_toTopOf="@id/iv_compass_base"
             app:layout_constraintBottom_toBottomOf="@id/iv_compass_base"

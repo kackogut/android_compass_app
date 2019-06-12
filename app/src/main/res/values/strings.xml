@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">CompassApp</string>
+    <string name="app_name" translatable="false">CompassApp</string>
+
     <string name="navigate">Navigate</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
+    <string name="location_permission_rationale_description">App requires your location to be able to navigate you to your destination</string>
+    <string name="ok">Ok</string>
 </resources>

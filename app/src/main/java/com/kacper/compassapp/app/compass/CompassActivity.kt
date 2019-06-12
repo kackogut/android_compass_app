@@ -1,5 +1,6 @@
 package com.kacper.compassapp.app.compass
 
+import android.Manifest
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -11,6 +12,7 @@ import com.kacper.compassapp.R
 import com.kacper.compassapp.databinding.ActivityCompassBinding
 import com.kacper.compassapp.di.viewModel.getViewModel
 import com.kacper.compassapp.utils.AnimationHelpers
+import com.kacper.compassapp.utils.checkLocationPermission
 import com.patloew.rxlocation.RxLocation
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -54,15 +56,32 @@ class CompassActivity : AppCompatActivity(), SensorEventListener {
                         activityCompassBinding.ivCompassBase.startAnimation(animation)
 
                         val arrowAnimation = AnimationHelpers.getRotateAnimation(
-                            -compassViewModel.currentAzimuth,
-                            -compassViewModel.azimut
+                            -(compassViewModel.currentAzimuth + compassViewModel.destinationBearing),
+                            -(compassViewModel.azimut + compassViewModel.destinationBearing)
                         )
                         activityCompassBinding.ivCompassDestinationArrow.startAnimation(arrowAnimation)
 
                     }
 
+                    CompassStateValue.OnLocationRequest -> {
+                        if(checkLocationPermission(shouldRequestLocation = true)){
+                            compassViewModel.requestLocation()
+                        }
+                    }
+
                 }
             }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(checkLocationPermission(shouldRequestLocation = false)){
+            compassViewModel.requestLocation()
+        }
     }
 
     override fun onResume() {
