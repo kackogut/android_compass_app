@@ -1,6 +1,5 @@
 package com.kacper.compassapp.app.compass
 
-import android.Manifest
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -13,6 +12,7 @@ import com.kacper.compassapp.databinding.ActivityCompassBinding
 import com.kacper.compassapp.di.viewModel.getViewModel
 import com.kacper.compassapp.utils.AnimationHelpers
 import com.kacper.compassapp.utils.checkLocationPermission
+import com.kacper.compassapp.utils.showToastError
 import com.patloew.rxlocation.RxLocation
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -45,32 +45,42 @@ class CompassActivity : AppCompatActivity(), SensorEventListener {
     private fun initViewModelListener(activityCompassBinding: ActivityCompassBinding) {
 
         compositeDisposable +=
-            compassViewModel.state.subscribe { compassViewModelState ->
-                when (compassViewModelState.step) {
+            compassViewModel.state
+                .subscribe { compassViewModelState ->
 
-                    CompassStateValue.OnAzimuthChange -> {
-                        val animation = AnimationHelpers.getRotateAnimation(
-                            -compassViewModel.currentAzimuth,
-                            -compassViewModel.azimut
-                        )
-                        activityCompassBinding.ivCompassBase.startAnimation(animation)
+                    compassViewModelState.error?.let {
+                        showToastError(it)
 
-                        val arrowAnimation = AnimationHelpers.getRotateAnimation(
-                            -(compassViewModel.currentAzimuth + compassViewModel.destinationBearing),
-                            -(compassViewModel.azimut + compassViewModel.destinationBearing)
-                        )
-                        activityCompassBinding.ivCompassDestinationArrow.startAnimation(arrowAnimation)
+                    } ?: when (compassViewModelState.step) {
 
-                    }
+                        CompassStateSuccess.OnAzimuthChange -> {
+                            animateCompassBorder(activityCompassBinding)
+                            animateCompassMiddle(activityCompassBinding)
+                        }
 
-                    CompassStateValue.OnLocationRequest -> {
-                        if(checkLocationPermission(shouldRequestLocation = true)){
-                            compassViewModel.requestLocation()
+                        CompassStateSuccess.OnLocationRequest -> {
+                            if (checkLocationPermission(shouldRequestLocation = true)) {
+                                compassViewModel.requestLocation()
+                            }
                         }
                     }
-
                 }
-            }
+    }
+
+    private fun animateCompassBorder(activityCompassBinding: ActivityCompassBinding) {
+        val animation = AnimationHelpers.getRotateAnimation(
+            -compassViewModel.currentAzimuth,
+            -compassViewModel.azimuth
+        )
+        activityCompassBinding.ivCompassBase.startAnimation(animation)
+    }
+
+    private fun animateCompassMiddle(activityCompassBinding: ActivityCompassBinding) {
+        val arrowAnimation = AnimationHelpers.getRotateAnimation(
+            -(compassViewModel.currentAzimuth + compassViewModel.destinationBearing),
+            -(compassViewModel.azimuth + compassViewModel.destinationBearing)
+        )
+        activityCompassBinding.ivCompassDestinationArrow.startAnimation(arrowAnimation)
     }
 
     override fun onRequestPermissionsResult(
@@ -79,7 +89,7 @@ class CompassActivity : AppCompatActivity(), SensorEventListener {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(checkLocationPermission(shouldRequestLocation = false)){
+        if (checkLocationPermission(shouldRequestLocation = false)) {
             compassViewModel.requestLocation()
         }
     }
@@ -107,5 +117,10 @@ class CompassActivity : AppCompatActivity(), SensorEventListener {
         sensorEvent ?: return
 
         compassViewModel.onSensorValueChange(sensorEvent)
+    }
+
+    override fun onDestroy() {
+        compositeDisposable.dispose()
+        super.onDestroy()
     }
 }

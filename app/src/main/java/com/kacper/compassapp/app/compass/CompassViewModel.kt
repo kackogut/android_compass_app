@@ -10,6 +10,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.location.LocationRequest
+import com.kacper.compassapp.R
 import com.kacper.compassapp.utils.COMPASS_ALPHA
 import com.kacper.compassapp.utils.Utils
 import com.patloew.rxlocation.RxLocation
@@ -29,7 +30,7 @@ class CompassViewModel(
     var gravityArray = FloatArray(3)
     var geomagneticArray = FloatArray(3)
 
-    var azimut : Float = 0F
+    var azimuth : Float = 0F
     var currentAzimuth: Float = 0F
     var destinationBearing: Float = 0F
 
@@ -69,9 +70,9 @@ class CompassViewModel(
             val orientation = FloatArray(3)
             SensorManager.getOrientation(rotationArray, orientation)
 
-            azimut = Utils.getAzimutValue(orientation[0])
-            state.onNext(CompassState(CompassStateValue.OnAzimuthChange))
-            currentAzimuth = azimut
+            azimuth = Utils.getAzimuthValue(orientation[0])
+            state.onNext(CompassState(CompassStateSuccess.OnAzimuthChange))
+            currentAzimuth = azimuth
 
         }
     }
@@ -97,17 +98,21 @@ class CompassViewModel(
 
     }
 
-    fun startNavigation(){
-        if(destinationLat.get().isNullOrEmpty() || destinationLon.get().isNullOrEmpty()){
-            //state.onError()
+    fun onNavigateClick(){
+        if(isNavigationStarted.get()){
+            isNavigationStarted.set(false)
         } else {
-            currentDestination.set(Location(LocationManager.GPS_PROVIDER))
-            currentDestination.get()?.let {
-                it.latitude = destinationLat.get()!!.toDouble()
-                it.longitude = destinationLon.get()!!.toDouble()
+            if (destinationLat.get().isNullOrEmpty() || destinationLon.get().isNullOrEmpty()) {
+                state.onNext(CompassState(error = R.string.error_invalid_latitude_longitude))
+            } else {
+                currentDestination.set(Location(LocationManager.GPS_PROVIDER))
+                currentDestination.get()?.let {
+                    it.latitude = destinationLat.get()!!.toDouble()
+                    it.longitude = destinationLon.get()!!.toDouble()
+                }
+                //TODO make state easier to use
+                state.onNext(CompassState(CompassStateSuccess.OnLocationRequest))
             }
-            //TODO make state easier to use
-            state.onNext(CompassState(CompassStateValue.OnLocationRequest))
         }
     }
 

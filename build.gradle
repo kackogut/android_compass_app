@@ -12,13 +12,14 @@ buildscript {
                 rxAndroid           : "2.1.1",
                 rxKotlin            : "2.3.0",
                 rxLocation          : "1.0.5",
-                timber              : "4.7.1"
+                timber              : "4.7.1",
+                toasty              : "1.4.2"
         ]
     }
     repositories {
         google()
         jcenter()
-        
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$versions.gradle"
@@ -30,7 +31,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven { url "https://jitpack.io" }
     }
 }
 

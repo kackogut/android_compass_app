@@ -6,4 +6,7 @@
     <string name="longitude">Longitude</string>
     <string name="location_permission_rationale_description">App requires your location to be able to navigate you to your destination</string>
     <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="error_invalid_latitude_longitude">Enter valid latitude and longitude</string>
 </resources>

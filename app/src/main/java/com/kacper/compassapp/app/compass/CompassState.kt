@@ -1,10 +1,13 @@
 package com.kacper.compassapp.app.compass
 
+
 class CompassState(
-    var step : CompassStateValue
+    var step : CompassStateSuccess? = null,
+
+    var error : Int? = null
 )
 
-sealed class CompassStateValue {
-    object OnAzimuthChange : CompassStateValue()
-    object OnLocationRequest : CompassStateValue()
+sealed class CompassStateSuccess {
+    object OnAzimuthChange : CompassStateSuccess()
+    object OnLocationRequest : CompassStateSuccess()
 }

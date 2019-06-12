@@ -10,7 +10,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.kacper.compassapp"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -47,6 +47,7 @@ dependencies {
     //ui
     implementation "com.google.android.material:material:$versions.material"
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraintLayout"
+    implementation "com.github.GrenderG:Toasty:$versions.toasty"
 
     //location
     implementation "com.patloew.rxlocation:rxlocation:$versions.rxLocation"

@@ -67,6 +67,7 @@
                 android:id="@+id/et_compass_latitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="@{!compassViewModel.isNavigationStarted()}"
                 android:text="@={compassViewModel.destinationLat}"
                 android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -86,6 +87,7 @@
                 android:id="@+id/et_compass_longitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="@{!compassViewModel.isNavigationStarted()}"
                 android:text="@={compassViewModel.destinationLon}"
                 android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -97,10 +99,11 @@
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
             android:layout_marginBottom="@dimen/margin_medium"
-            android:text="@string/navigate"
-            android:onClick="@{() -> compassViewModel.startNavigation()}"
+            android:text="@{compassViewModel.isNavigationStarted ? @string/cancel : @string/navigate}"
+            android:onClick="@{() -> compassViewModel.onNavigateClick()}"
             android:textColor="@color/colorWhite"
             android:background="@drawable/btn_rounded_corner_background"
+            android:backgroundTint="@{compassViewModel.isNavigationStarted ? @color/colorRedCancel : @color/colorPrimaryDark}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
