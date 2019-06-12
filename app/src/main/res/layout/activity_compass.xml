@@ -28,13 +28,15 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <ImageView
-            android:layout_width="@dimen/compass_destination_arrow_size"
-            android:layout_height="@dimen/compass_destination_arrow_size"
+            android:id="@+id/iv_compass_destination_arrow"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:srcCompat="@drawable/ic_compass_destination"
             android:tint="@color/colorPrimaryDark"
-            android:layout_marginBottom="@dimen/margin_small"
             app:visibility="@{compassViewModel.currentDestination != null}"
-            app:layout_constraintBottom_toTopOf="@id/iv_compass_base"
+            android:layout_margin="@dimen/compass_destination_arrow_margin"
+            app:layout_constraintTop_toTopOf="@id/iv_compass_base"
+            app:layout_constraintBottom_toBottomOf="@id/iv_compass_base"
             app:layout_constraintStart_toStartOf="@id/iv_compass_base"
             app:layout_constraintEnd_toEndOf="@id/iv_compass_base"/>
 
@@ -42,12 +44,14 @@
             android:id="@+id/iv_compass_base"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_margin="@dimen/compass_base_margin"
+            android:layout_marginStart="@dimen/compass_base_margin"
+            android:layout_marginEnd="@dimen/compass_base_margin"
+            android:layout_marginBottom="@dimen/compass_base_margin"
             app:layout_constraintBottom_toTopOf="@id/ti_compass_latitude"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_logo_compass_screen"
-            app:srcCompat="@drawable/ic_compas_with_cardinal"
+            app:srcCompat="@drawable/ic_compass"
             />
 
         <com.google.android.material.textfield.TextInputLayout

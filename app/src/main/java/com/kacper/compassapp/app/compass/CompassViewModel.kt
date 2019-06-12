@@ -7,7 +7,6 @@ import android.hardware.SensorManager
 import android.location.Location
 import android.location.LocationManager
 import androidx.databinding.ObservableField
-import androidx.databinding.ObservableFloat
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.location.LocationRequest
 import com.kacper.compassapp.utils.COMPASS_ALPHA
@@ -26,6 +25,7 @@ class CompassViewModel(
 
     var azimut : Float = 0F
     var currentAzimuth: Float = 0F
+    var destinationBearing: Float = 0F
 
     private var compositeDisposable = CompositeDisposable()
 
@@ -33,7 +33,7 @@ class CompassViewModel(
     var destinationLon = ObservableField<String>()
     var currentDestination = ObservableField<Location?>()
 
-    val locationPermissionSubject = PublishSubject.create<CompassState>()
+    val state = PublishSubject.create<CompassState>()
 
     fun onSensorValueChange(sensorEvent: SensorEvent) {
         if (sensorEvent.sensor.type == Sensor.TYPE_ACCELEROMETER) {
@@ -64,7 +64,7 @@ class CompassViewModel(
             SensorManager.getOrientation(rotationArray, orientation)
 
             azimut = Utils.getAzimutValue(orientation[0])
-            locationPermissionSubject.onNext(CompassState(CompassStateValue.OnAzimuthChange))
+            state.onNext(CompassState(CompassStateValue.OnAzimuthChange))
             currentAzimuth = azimut
 
         }
@@ -86,13 +86,15 @@ class CompassViewModel(
 
     fun startNavigation(){
         if(destinationLat.get().isNullOrEmpty() || destinationLon.get().isNullOrEmpty()){
-            //locationPermissionSubject.onError()
+            //state.onError()
         } else {
             currentDestination.set(Location(LocationManager.GPS_PROVIDER))
             currentDestination.get()?.let {
                 it.latitude = destinationLat.get()!!.toDouble()
                 it.longitude = destinationLon.get()!!.toDouble()
             }
+            //TODO make state easier to use
+            state.onNext(CompassState(CompassStateValue.OnLocationRequest))
         }
     }
 

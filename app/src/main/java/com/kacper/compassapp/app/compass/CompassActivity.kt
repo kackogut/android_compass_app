@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.kacper.compassapp.R
 import com.kacper.compassapp.databinding.ActivityCompassBinding
 import com.kacper.compassapp.di.viewModel.getViewModel
-import com.kacper.compassapp.utils.setCompassAnimation
+import com.kacper.compassapp.utils.AnimationHelpers
 import com.patloew.rxlocation.RxLocation
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -43,14 +43,22 @@ class CompassActivity : AppCompatActivity(), SensorEventListener {
     private fun initViewModelListener(activityCompassBinding: ActivityCompassBinding) {
 
         compositeDisposable +=
-            compassViewModel.locationPermissionSubject.subscribe { compassViewModelState ->
+            compassViewModel.state.subscribe { compassViewModelState ->
                 when (compassViewModelState.step) {
 
                     CompassStateValue.OnAzimuthChange -> {
-                        activityCompassBinding.ivCompassBase.setCompassAnimation(
+                        val animation = AnimationHelpers.getRotateAnimation(
                             -compassViewModel.currentAzimuth,
                             -compassViewModel.azimut
                         )
+                        activityCompassBinding.ivCompassBase.startAnimation(animation)
+
+                        val arrowAnimation = AnimationHelpers.getRotateAnimation(
+                            -compassViewModel.currentAzimuth,
+                            -compassViewModel.azimut
+                        )
+                        activityCompassBinding.ivCompassDestinationArrow.startAnimation(arrowAnimation)
+
                     }
 
                 }
