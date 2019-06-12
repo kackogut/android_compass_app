@@ -7,39 +7,54 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.Observable
-import androidx.lifecycle.ViewModelProviders
 import com.kacper.compassapp.R
 import com.kacper.compassapp.databinding.ActivityCompassBinding
+import com.kacper.compassapp.di.viewModel.getViewModel
 import com.kacper.compassapp.utils.setCompassAnimation
+import com.patloew.rxlocation.RxLocation
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 
 class CompassActivity : AppCompatActivity(), SensorEventListener {
-
-    private lateinit var binding: ActivityCompassBinding
 
     private lateinit var sensorManager: SensorManager
 
     private val compassViewModel by lazy {
-        ViewModelProviders.of(this).get(CompassViewModel::class.java)
+        getViewModel {
+            CompassViewModel(RxLocation(this))
+        }
     }
+
+    private val compositeDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding =
+
+        val activityCompassBinding: ActivityCompassBinding =
             DataBindingUtil.setContentView(this, R.layout.activity_compass)
 
+        activityCompassBinding.compassViewModel = compassViewModel
         sensorManager = (getSystemService(SENSOR_SERVICE) as SensorManager)
 
-        compassViewModel.azimut.addOnPropertyChangedCallback(object :
-            Observable.OnPropertyChangedCallback() {
-            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                binding.ivCompassBase.setCompassAnimation(
-                    -compassViewModel.currentAzimuth,
-                    -compassViewModel.azimut.get()
-                )
-            }
-        })
+        initViewModelListener(activityCompassBinding)
 
+    }
+
+    private fun initViewModelListener(activityCompassBinding: ActivityCompassBinding) {
+
+        compositeDisposable +=
+            compassViewModel.locationPermissionSubject.subscribe { compassViewModelState ->
+                when (compassViewModelState.step) {
+
+                    CompassStateValue.OnAzimuthChange -> {
+                        activityCompassBinding.ivCompassBase.setCompassAnimation(
+                            -compassViewModel.currentAzimuth,
+                            -compassViewModel.azimut
+                        )
+                    }
+
+                }
+            }
     }
 
     override fun onResume() {
