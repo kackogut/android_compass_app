@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         tools:context=".app.compass.CompassActivity">
 
         <ImageView
@@ -25,20 +27,70 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
-            app:layout_constraintBottom_toTopOf="@id/btn_navigate_compass_screen"
+            app:layout_constraintBottom_toTopOf="@id/ti_compass_latitude"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_logo_compass_screen"
             app:srcCompat="@drawable/ic_compas_with_cardinal"
             />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_compass_latitude"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_navigate_compass_screen"
+            app:layout_constraintEnd_toStartOf="@id/gl_center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/latitude"
+            android:layout_margin="@dimen/margin_medium"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_compass_latitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ti_compass_longitude"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_navigate_compass_screen"
+            app:layout_constraintStart_toEndOf="@id/gl_center"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/longitude"
+            android:layout_margin="@dimen/margin_medium"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_compass_longitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:id="@+id/btn_navigate_compass_screen"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginEnd="@dimen/margin_medium"
             android:layout_marginBottom="@dimen/margin_medium"
+            android:text="@string/navigate"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/btn_rounded_corner_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5"/>
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

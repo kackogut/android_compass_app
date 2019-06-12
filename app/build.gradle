@@ -36,4 +36,6 @@ dependencies {
     implementation "androidx.core:core-ktx:$versions.ktx"
     implementation "androidx.constraintlayout:constraintlayout:$versions.constraintLayout"
     implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycleExtensions"
+    implementation "com.google.android.material:material:$versions.material"
+
 }

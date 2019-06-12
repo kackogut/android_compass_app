@@ -29,18 +29,17 @@ class CompassViewModel : ViewModel() {
         }
 
 
-        val R = FloatArray(9)
-        val I = FloatArray(9)
+        val rotationArray = FloatArray(9)
+        val inclinationArray = FloatArray(9)
 
-        if (SensorManager.getRotationMatrix(R, I, gravityArray, geomagneticArray)) {
+        if (SensorManager.getRotationMatrix(rotationArray, inclinationArray, gravityArray, geomagneticArray)) {
 
             val orientation = FloatArray(3)
-            SensorManager.getOrientation(R, orientation)
+            SensorManager.getOrientation(rotationArray, orientation)
 
             azimut.set(Utils.getAzimutValue(orientation[0]))
             currentAzimuth = azimut.get()
 
         }
-
     }
 }
