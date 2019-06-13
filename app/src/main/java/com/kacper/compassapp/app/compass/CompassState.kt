@@ -2,9 +2,9 @@ package com.kacper.compassapp.app.compass
 
 
 class CompassState(
-    var step : CompassStateSuccess? = null,
+    var step: CompassStateSuccess? = null,
 
-    var error : Int? = null
+    var error: Int? = null
 )
 
 sealed class CompassStateSuccess {

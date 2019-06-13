@@ -2,7 +2,6 @@ package com.kacper.compassapp.utils
 
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
-import android.widget.ImageView
 
 class AnimationHelpers {
     companion object {

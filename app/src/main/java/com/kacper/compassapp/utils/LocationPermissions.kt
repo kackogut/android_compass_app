@@ -24,7 +24,11 @@ object LocationPermission {
     }
 
     fun requestLocationPermission(activity: Activity) {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission.ACCESS_FINE_LOCATION)) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                activity,
+                permission.ACCESS_FINE_LOCATION
+            )
+        ) {
             showRationale(activity)
         } else {
             showRequestPermission(activity)
@@ -49,9 +53,9 @@ object LocationPermission {
     }
 }
 
-fun Activity.checkLocationPermission(shouldRequestLocation : Boolean) =
+fun Activity.checkLocationPermission(shouldRequestLocation: Boolean) =
     if (!LocationPermission.isLocationPermissionGranted(this)) {
-        if(shouldRequestLocation) {
+        if (shouldRequestLocation) {
             LocationPermission.requestLocationPermission(this)
         }
         false

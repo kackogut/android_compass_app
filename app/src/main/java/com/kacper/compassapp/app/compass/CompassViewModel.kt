@@ -30,7 +30,7 @@ class CompassViewModel(
     var gravityArray = FloatArray(3)
     var geomagneticArray = FloatArray(3)
 
-    var azimuth : Float = 0F
+    var azimuth: Float = 0F
     var currentAzimuth: Float = 0F
     var destinationBearing: Float = 0F
 
@@ -89,17 +89,17 @@ class CompassViewModel(
             rxLocation.location().updates(locationRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe ({
+                .subscribe({
                     destinationBearing =
-                            it.bearingTo(currentDestination.get())
+                        it.bearingTo(currentDestination.get())
                 }, {
                     Timber.e(it)
                 })
 
     }
 
-    fun onNavigateClick(){
-        if(isNavigationStarted.get()){
+    fun onNavigateClick() {
+        if (isNavigationStarted.get()) {
             isNavigationStarted.set(false)
         } else {
             if (destinationLat.get().isNullOrEmpty() || destinationLon.get().isNullOrEmpty()) {
