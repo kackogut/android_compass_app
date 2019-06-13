@@ -1,7 +1,6 @@
 package com.kacper.compassapp.utils
 
 import android.view.View
-import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 
 @BindingAdapter("visibility")

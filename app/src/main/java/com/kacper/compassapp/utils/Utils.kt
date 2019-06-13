@@ -12,6 +12,6 @@ class Utils {
     }
 }
 
-fun Activity.showToastError(stringResource :Int){
+fun Activity.showToastError(stringResource: Int) {
     Toasty.error(this, getString(stringResource), Toast.LENGTH_SHORT, true).show()
 }

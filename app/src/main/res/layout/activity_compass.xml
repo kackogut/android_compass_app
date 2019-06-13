@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="compassViewModel"
             type="com.kacper.compassapp.app.compass.CompassViewModel"/>
@@ -31,12 +32,12 @@
             android:id="@+id/iv_compass_destination_arrow"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@{compassViewModel.isNavigationStarted ? @drawable/ic_compass_destination : @drawable/ic_compass}"
             android:layout_margin="@dimen/compass_destination_arrow_margin"
-            app:layout_constraintTop_toTopOf="@id/iv_compass_base"
+            android:src="@{compassViewModel.isNavigationStarted ? @drawable/ic_compass_destination : @drawable/ic_compass}"
             app:layout_constraintBottom_toBottomOf="@id/iv_compass_base"
+            app:layout_constraintEnd_toEndOf="@id/iv_compass_base"
             app:layout_constraintStart_toStartOf="@id/iv_compass_base"
-            app:layout_constraintEnd_toEndOf="@id/iv_compass_base"/>
+            app:layout_constraintTop_toTopOf="@id/iv_compass_base"/>
 
         <ImageView
             android:id="@+id/iv_compass_base"
@@ -54,42 +55,42 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_compass_latitude"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btn_navigate_compass_screen"
-            app:layout_constraintEnd_toStartOf="@id/gl_center"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/latitude"
             android:layout_margin="@dimen/margin_medium"
-            app:errorEnabled="true">
+            android:hint="@string/latitude"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/btn_navigate_compass_screen"
+            app:layout_constraintEnd_toStartOf="@id/gl_center"
+            app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_compass_latitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="@{!compassViewModel.isNavigationStarted()}"
-                android:text="@={compassViewModel.destinationLat}"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:text="@={compassViewModel.destinationLat}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_compass_longitude"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/btn_navigate_compass_screen"
-            app:layout_constraintStart_toEndOf="@id/gl_center"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="@string/longitude"
             android:layout_margin="@dimen/margin_medium"
-            app:errorEnabled="true">
+            android:hint="@string/longitude"
+            app:errorEnabled="true"
+            app:layout_constraintBottom_toTopOf="@id/btn_navigate_compass_screen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/gl_center">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_compass_longitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="@{!compassViewModel.isNavigationStarted()}"
-                android:text="@={compassViewModel.destinationLon}"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:text="@={compassViewModel.destinationLon}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
@@ -99,11 +100,11 @@
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginEnd="@dimen/margin_medium"
             android:layout_marginBottom="@dimen/margin_medium"
-            android:text="@{compassViewModel.isNavigationStarted ? @string/cancel : @string/navigate}"
-            android:onClick="@{() -> compassViewModel.onNavigateClick()}"
-            android:textColor="@color/colorWhite"
             android:background="@drawable/btn_rounded_corner_background"
             android:backgroundTint="@{compassViewModel.isNavigationStarted ? @color/colorRedCancel : @color/colorPrimaryDark}"
+            android:onClick="@{() -> compassViewModel.onNavigateClick()}"
+            android:text="@{compassViewModel.isNavigationStarted ? @string/cancel : @string/navigate}"
+            android:textColor="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
