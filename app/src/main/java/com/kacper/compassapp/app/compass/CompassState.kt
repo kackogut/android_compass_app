@@ -10,4 +10,5 @@ class CompassState(
 sealed class CompassStateSuccess {
     object OnAzimuthChange : CompassStateSuccess()
     object OnLocationRequest : CompassStateSuccess()
+    object OnDestinationReached : CompassStateSuccess()
 }

@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.location.LocationRequest
 import com.kacper.compassapp.R
 import com.kacper.compassapp.utils.COMPASS_ALPHA
+import com.kacper.compassapp.utils.LOCATION_REQUEST_INTERVAL
 import com.kacper.compassapp.utils.Utils
 import com.patloew.rxlocation.RxLocation
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -83,24 +84,40 @@ class CompassViewModel(
 
         val locationRequest = LocationRequest.create()
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-            .setInterval(5000)
+            .setInterval(LOCATION_REQUEST_INTERVAL)
 
         compositeDisposable +=
             rxLocation.location().updates(locationRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    destinationBearing =
-                        it.bearingTo(currentDestination.get())
+                .subscribe({ currentLocation ->
+
+                    if (currentLocation.latitude == currentDestination.get()?.latitude
+                        && currentLocation.longitude == currentDestination.get()?.longitude
+                    ) {
+                        resetDestination()
+                        state.onNext(CompassState(CompassStateSuccess.OnLocationRequest))
+
+                    } else {
+                        destinationBearing =
+                            currentLocation.bearingTo(currentDestination.get())
+
+                    }
                 }, {
                     Timber.e(it)
                 })
 
     }
 
+    private fun resetDestination() {
+        isNavigationStarted.set(false)
+        destinationLat.set("")
+        destinationLon.set("")
+    }
+
     fun onNavigateClick() {
         if (isNavigationStarted.get()) {
-            isNavigationStarted.set(false)
+            resetDestination()
         } else {
             if (destinationLat.get().isNullOrEmpty() || destinationLon.get().isNullOrEmpty()) {
                 state.onNext(CompassState(error = R.string.error_invalid_latitude_longitude))
@@ -110,7 +127,6 @@ class CompassViewModel(
                     it.latitude = destinationLat.get()!!.toDouble()
                     it.longitude = destinationLon.get()!!.toDouble()
                 }
-                //TODO make state easier to use
                 state.onNext(CompassState(CompassStateSuccess.OnLocationRequest))
             }
         }

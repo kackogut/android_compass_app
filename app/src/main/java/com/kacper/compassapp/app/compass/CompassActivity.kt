@@ -13,6 +13,7 @@ import com.kacper.compassapp.di.viewModel.getViewModel
 import com.kacper.compassapp.utils.AnimationHelpers
 import com.kacper.compassapp.utils.checkLocationPermission
 import com.kacper.compassapp.utils.showToastError
+import com.kacper.compassapp.utils.showToastSuccess
 import com.patloew.rxlocation.RxLocation
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
@@ -50,7 +51,6 @@ class CompassActivity : AppCompatActivity(), SensorEventListener {
 
                     compassViewModelState.error?.let {
                         showToastError(it)
-
                     } ?: when (compassViewModelState.step) {
 
                         CompassStateSuccess.OnAzimuthChange -> {
@@ -62,6 +62,10 @@ class CompassActivity : AppCompatActivity(), SensorEventListener {
                             if (checkLocationPermission(shouldRequestLocation = true)) {
                                 compassViewModel.requestLocation()
                             }
+                        }
+
+                        CompassStateSuccess.OnDestinationReached -> {
+                            showToastSuccess(R.string.on_destination_reached_message)
                         }
                     }
                 }

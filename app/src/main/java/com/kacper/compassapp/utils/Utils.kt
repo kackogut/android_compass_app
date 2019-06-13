@@ -15,3 +15,7 @@ class Utils {
 fun Activity.showToastError(stringResource: Int) {
     Toasty.error(this, getString(stringResource), Toast.LENGTH_SHORT, true).show()
 }
+
+fun Activity.showToastSuccess(stringResource: Int) {
+    Toasty.success(this, getString(stringResource), Toast.LENGTH_SHORT, true).show()
+}

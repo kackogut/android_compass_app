@@ -8,5 +8,7 @@
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
 
+    <string name="on_destination_reached_message">You have reached your destination</string>
     <string name="error_invalid_latitude_longitude">Enter valid latitude and longitude</string>
+
 </resources>
