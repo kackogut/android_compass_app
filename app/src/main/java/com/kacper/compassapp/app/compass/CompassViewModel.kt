@@ -11,7 +11,6 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.location.LocationRequest
 import com.kacper.compassapp.R
-import com.kacper.compassapp.utils.COMPASS_ALPHA
 import com.kacper.compassapp.utils.LOCATION_REQUEST_INTERVAL
 import com.kacper.compassapp.utils.Utils
 import com.patloew.rxlocation.RxLocation
@@ -45,15 +44,11 @@ class CompassViewModel(
 
     fun onSensorValueChange(sensorEvent: SensorEvent) {
         if (sensorEvent.sensor.type == Sensor.TYPE_ACCELEROMETER) {
-            gravityArray = sensorEvent.values.slice(0..2).mapIndexed { index, value ->
-                value * (1 - COMPASS_ALPHA) + COMPASS_ALPHA * gravityArray[index]
-            }.toFloatArray()
+            gravityArray = Utils.convertToSensorArray(gravityArray, sensorEvent)
         }
 
         if (sensorEvent.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
-            geomagneticArray = sensorEvent.values.slice(0..2).mapIndexed { index, value ->
-                value * (1 - COMPASS_ALPHA) + COMPASS_ALPHA * geomagneticArray[index]
-            }.toFloatArray()
+            geomagneticArray = Utils.convertToSensorArray(geomagneticArray, sensorEvent)
         }
 
 

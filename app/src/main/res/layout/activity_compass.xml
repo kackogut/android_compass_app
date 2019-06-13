@@ -68,6 +68,8 @@
                 android:id="@+id/et_compass_latitude"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:nextFocusForward="@+id/ti_compass_longitude"
+                android:imeOptions="actionNext"
                 android:enabled="@{!compassViewModel.isNavigationStarted()}"
                 android:inputType="numberDecimal"
                 android:text="@={compassViewModel.destinationLat}"/>
